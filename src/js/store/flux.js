@@ -2,8 +2,8 @@ const getState = ({ getStore, setStore }) => {
 	return {
 		store: {
 			/*
-			*	 Principal state
-			*/
+			 *	 Principal state
+			 */
 
 			agenda: [],
 			users: [],
@@ -13,8 +13,8 @@ const getState = ({ getStore, setStore }) => {
 			formData: [],
 
 			/*
-			*	Communication between components
-			*/
+			 *	Communication between components
+			 */
 			send: false,
 			error: false,
 			target: "",
