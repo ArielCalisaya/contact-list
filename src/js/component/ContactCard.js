@@ -1,15 +1,9 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Context } from "../store/appContext";
 
 class ContactCard extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			// initialize your state
-		};
-	}
-
 	render() {
 		return (
 			<li className="list-group-item">
@@ -23,17 +17,35 @@ class ContactCard extends React.Component {
 					</div>
 					<div className="col-12 col-sm-6 col-md-9 text-center text-sm-left">
 						<div className=" float-right">
-							<button className="btn">
-								<i className="fas fa-pencil-alt mr-3" />
-							</button>
-							<button className="btn" onClick={() => this.props.onDelete()}>
-								<i className="fas fa-trash-alt" />
-							</button>
+							<Context.Consumer>
+								{({ actions }) => {
+									return (
+										<div>
+											<button
+												className="btn"
+												onClick={e => {
+													this.props.history.push(`/edit/${this.props.id}`);
+												}}>
+												<i className="fas fa-pencil-alt mr-3" />
+												Editar
+											</button>
+											<button
+												className="btn"
+												onClick={e => {
+													this.props.onDelete();
+													actions.sniperTarget(this.props.id);
+												}}>
+												<i className="fas fa-trash-alt" />
+											</button>
+										</div>
+									);
+								}}
+							</Context.Consumer>
 						</div>
-						<label className="name lead">Mike Anamendolla</label>
+						<label className="name lead">{this.props.full_name}</label>
 						<br />
 						<i className="fas fa-map-marker-alt text-muted mr-3" />
-						<span className="text-muted">5842 Hillcrest Rd</span>
+						<span className="text-muted">{this.props.address}</span>
 						<br />
 						<span
 							className="fa fa-phone fa-fw text-muted mr-3"
@@ -41,7 +53,7 @@ class ContactCard extends React.Component {
 							title=""
 							data-original-title="(870) 288-4149"
 						/>
-						<span className="text-muted small">(870) 288-4149</span>
+						<span className="text-muted small">{this.props.phone}</span>
 						<br />
 						<span
 							className="fa fa-envelope fa-fw text-muted mr-3"
@@ -49,7 +61,7 @@ class ContactCard extends React.Component {
 							data-original-title=""
 							title=""
 						/>
-						<span className="text-muted small text-truncate">mike.ana@example.com</span>
+						<span className="text-muted small text-truncate">{this.props.email}</span>
 					</div>
 				</div>
 			</li>
@@ -63,7 +75,13 @@ class ContactCard extends React.Component {
  **/
 ContactCard.propTypes = {
 	history: PropTypes.object,
-	onDelete: PropTypes.func
+	onDelete: PropTypes.func,
+	full_name: PropTypes.string,
+	address: PropTypes.string,
+	phone: PropTypes.string,
+	email: PropTypes.string,
+	key: PropTypes.number,
+	id: PropTypes.string
 };
 
 /**
@@ -73,4 +91,4 @@ ContactCard.propTypes = {
 ContactCard.defaultProps = {
 	onDelete: null
 };
-export default ContactCard;
+export default withRouter(ContactCard);

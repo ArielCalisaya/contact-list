@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import SearchAgenda from "../component/searchAgenda";
 import ContactCard from "../component/ContactCard.js";
 import Modal from "../component/Modal";
+import { Context } from "../store/appContext";
 
 export default class Contacts extends React.Component {
 	constructor() {
@@ -11,7 +12,6 @@ export default class Contacts extends React.Component {
 			showModal: false
 		};
 	}
-
 	render() {
 		return (
 			<div className="container">
@@ -21,12 +21,26 @@ export default class Contacts extends React.Component {
 							Add new contact
 						</Link>
 					</p>
+					<div className="m-2">
+						<SearchAgenda />
+					</div>
 					<div id="contacts" className="panel-collapse collapse show" aria-expanded="true">
 						<ul className="list-group pull-down" id="contact-list">
-							<ContactCard onDelete={() => this.setState({ showModal: true })} />
-							<ContactCard />
-							<ContactCard />
-							<ContactCard />
+							<Context.Consumer>
+								{({ store }) => {
+									return store.users.map((users, i) => (
+										<ContactCard
+											onDelete={() => this.setState({ showModal: true })}
+											full_name={users.full_name}
+											email={users.email}
+											address={users.address}
+											phone={users.phone}
+											id={users.id}
+											key={i}
+										/>
+									));
+								}}
+							</Context.Consumer>
 						</ul>
 					</div>
 				</div>
